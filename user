@@ -1,0 +1,32 @@
+const db = require('./db');
+
+const createUserTable = async () => {
+  try {
+    const query = `
+      CREATE TABLE IF NOT EXISTS your_table (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        age INT NOT NULL
+      )
+    `;
+
+    await db.execute(query);
+    console.log('User table created or already exists');
+  } catch (err) {
+    console.error('Error creating user table:', err);
+  }
+};
+
+const insertUser = async (user) => {
+  try {
+    const { name, age } = user;
+    const query = 'INSERT INTO your_table (name, age) VALUES (?, ?)';
+    const [results] = await db.execute(query, [name, age]);
+
+    console.log('User inserted:', results.insertId);
+  } catch (err) {
+    console.error('Error inserting user:', err);
+  }
+};
+
+module.exports = { createUserTable, insertUser };
